@@ -31,7 +31,7 @@
 import { mapGetters } from 'vuex'
 import { Http } from '@nativescript/core'
 import Bar from './Bar'
-import Ticket from './Partials/Ticket'
+import Ticket from './Events/Ticket'
 export default{
   components: {
     Bar, Ticket,

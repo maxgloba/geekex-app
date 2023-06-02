@@ -13,6 +13,7 @@
             class="field field__search"
             hint="Search"
             v-model="search"
+            @textChange="searchOrder"
             returnKeyType="done"
             @returnPress="submit()"
             autocorrect="false"
@@ -56,7 +57,7 @@
             <Label :text="totals.COD_PENDING.toFixed(2) | format" class="orders__total-val" />
           </StackLayout>
           <StackLayout class="orders__total-item orders__total-export">
-            <Button class="btn btn__export">
+            <Button class="btn btn__export" @tap="exportExcel">
               <Span class="fas" text.decode="&#xf1c3;" />
               <Span text="  " />
               <Span text="Export to Excel" />
@@ -64,9 +65,9 @@
           </StackLayout>
         </FlexboxLayout>
         <ListView
-          :visibility="orders.length > 0 ? 'visible' : 'collapse'"
+          :visibility="ordersSort.length > 0 ? 'visible' : 'collapse'"
           class="orders"
-          for="(order, index) in orders"
+          for="(order, index) in ordersSort"
           @itemTap="openOrder">
           <v-template>
             <StackLayout class="orders__item">
@@ -93,6 +94,8 @@
 </template>
 
 <script>
+import { Http } from '@nativescript/core'
+import { Utils } from '@nativescript/core';
 import { mapGetters } from 'vuex'
 import Bar from '../Bar'
 import Header from '../Header'
@@ -118,6 +121,7 @@ export default {
   },
   data(){
     return{
+      ordersSort: null,
       search: "",
       pageOrder: pageOrder,
       grandTotal: 0,
@@ -155,8 +159,6 @@ export default {
       return order.currencySymbol + result.replace(/(\d)(?=(\d{3})+([^\d]|$))/g, '$1,')
     },
     setTotals(o){
-      console.log('setTotals -------------------------------------------')
-      console.dir(0)
       o.forEach(order => {
         if(order.totalAmount){
           this.totals[order.orderStatus] = Number(this.totals[order.orderStatus]) + Number(order.totalAmount)
@@ -165,8 +167,77 @@ export default {
         if(order.orderStatus === 'COMPLETE') this.grandTotal = this.grandTotal + Number(order.totalAmount)
       })
     },
+    searchOrder(e){
+      this.ordersSort = []
+      this.orders.forEach(order => {
+        if( order.orderStatus.substring(0, e.value.length) == e.value ||
+            order.lastName.substring(0, e.value.length) == e.value ||
+            order.firstName.substring(0, e.value.length) == e.value ||
+            order.phoneNumber.substring(0, e.value.length) == e.value ||
+            order.orderId.search(e.value) > 0 || order.emailAddress.search(e.value) > 0 ){
+          this.ordersSort.push(order)
+        }
+      })
+    },
+    exportExcel(){
+      const ordersExport = []
+      this.orders.forEach(order => {
+        const date = this.$options.filters.setDate(order.dateCreated)
+        const orderObj = {
+          'ID': order.orderId,
+          'Date': date,
+          'Campaign': order.campaignName,
+          'Name': `${order.shipFirstName} ${order.shipLastName}`,
+          'Email': order.emailAddress,
+          'Phone': order.phoneNumber,
+          'Status': order.orderStatus,
+          'Payment': order.paySource,
+          'UTMSource': order.UTMSource,
+          'UTMMedium': order.UTMMedium,
+          'UTMCampaign': order.UTMCampaign,
+          'UTMTerm': order.UTMTerm,
+          'UTMContent': order.UTMContent,
+          'affId': order.affId,
+          'Subtotal': (Number(order.discountPrice) + Number(order.price)).toFixed(2),
+          'Discount': order.discountPrice,
+          'Total': order.price
+        }
+        orderObj['Coupon'] = (order.couponCode) ? order.couponCode : ' '
+        orderObj['City'] = (order.address1 != 'undefined') ? order.city : ' '
+        orderObj['State'] = (order.address1 != 'undefined') ? order.state : ' '
+        orderObj['ZIP'] = (order.address1 != 'undefined') ? order.postalCode : ' '
+        orderObj['Country'] = (order.address1 != 'undefined') ? order.country : ' '
+        orderObj['Billing name'] = (order.address1 != 'undefined') ? `${order.firstName} ${order.lastName}` : ' '
+        orderObj['Ticket'] = (order.items && order.items[1]) ? order.items[1].name : ' '
+        orderObj['Ticket Qty'] = (order.items && order.items[1]) ? order.items[1].qty : ' '
+        orderObj['Ticket Price'] = (order.items && order.items[1]) ? order.items[1].price : ' '
+        orderObj['Dinner'] = (order.items && order.items[2]) ? order.items[2].name : ' '
+        orderObj['Dinner Qty'] = (order.items && order.items[2]) ? order.items[2].qty : ' '
+        orderObj['Dinner Price'] = (order.items && order.items[2]) ? order.items[2].price : ' '
+        orderObj['Replay'] = (order.items && order.items[3]) ? order.items[3].name : ' '
+        orderObj['Replay Qty'] = (order.items && order.items[3]) ? order.items[3].qty : ' '
+        orderObj['Replay Price'] = (order.items && order.items[3]) ? order.items[3].price : ' '
+        orderObj['Replay+Notes'] = (order.items && order.items[4]) ? order.items[4].name : ' '
+        orderObj['Replay+Notes Qty'] = (order.items && order.items[4]) ? order.items[4].qty : ' '
+        orderObj['Replay+Notes Price'] = (order.items && order.items[4]) ? order.items[4].price : ' '
+        ordersExport.push(orderObj)
+      })
+      Http.request({
+        url: 'https://api.geekex.com/ts/save-orders',
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        content: JSON.stringify({params: {orders: ordersExport}})
+      })
+        .then(res => {
+          Utils.openUrl('https://api.geekex.com/ts/save-orders')
+        })
+        .catch(err => {
+          console.dir(err)
+        })
+    },
   },
   created(){
+    this.ordersSort = this.orders
     this.setTotals(this.orders)
   },
 }
@@ -175,6 +246,9 @@ export default {
 <style lang="scss" scoped>
 @import '~/scss/variables';
 .orders{
+  height: 600;
+  min-height: 600;
+  max-height: 600;
   &__item{
     background: $second;
     margin-bottom: 15;

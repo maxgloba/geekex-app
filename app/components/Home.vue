@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import EventsList from './Events/List'
+import Events from './Events/Events'
 import Courses from './Courses'
 import News from './News'
 import Services from './Services'
@@ -43,7 +43,7 @@ export default {
   },
   data(){
     return {
-      pageEvents: EventsList,
+      pageEvents: Events,
       pageCourses: Courses,
       pageNews: News,
       pageServices: Services,

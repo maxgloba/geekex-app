@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import EventsList from './../List'
+import Events from './../Events'
 export default {
   name: 'checkout-thanks',
   props: {
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     openEvents(event) {
-      this.$navigateTo(EventsList, {
+      this.$navigateTo(Events, {
         transition: {
           name: 'slideRight',
           duration: 250

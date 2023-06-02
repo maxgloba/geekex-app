@@ -2,8 +2,7 @@
   <StackLayout class="ticket">
     <FlexboxLayout justifyContent="space-between" >
       <StackLayout class="ticket__info">
-        <Label left="0" top="0" class="ticket__event" :text="data.campaignId" />
-        <!-- <Label left="0" top="0" class="ticket__event" :text="eventName(data.campaignId)" /> -->
+        <Label left="0" top="0" class="ticket__event" :visibility="data.campaignId ? 'visible' : 'collapse'" :text="eventName(data.campaignId)" />
         <Label
           class="ticket__name"
           :text="data.user ? `${data.user.firstName} ${data.user.lastName}` : `${user.firstName} ${user.lastName}`" />
@@ -15,11 +14,11 @@
           class="ticket_btns"
           alignItems="flex-start"
           justifyContent="space-between">
-          <Button left="100" top="0" class="ticket__btn">
+          <Button left="100" top="0" class="ticket__btn" @tap="openTicket(data)">
             <Span class="ticket__btn-key" text="ID: " />
             <Span class="ticket__btn-value" :text="data.ticketId" />
           </Button>
-          <Button left="0" top="0" class="ticket__btn">
+          <Button left="0" top="0" class="ticket__btn" @tap="openOrder(data.orderId, data.campaignId)">
             <Span class="ticket__btn-key" text="Order: " />
             <Span class="ticket__btn-value" :text="data.orderId" />
           </Button>
@@ -39,10 +38,13 @@
 <script>
 import { Http } from '@nativescript/core'
 import { mapGetters } from 'vuex'
+import TicketFull from './TicketFull'
+import pageOrder from './Order'
 export default{
   computed: {
     ...mapGetters({
       events: 'getEvents',
+      orders: 'getOrders',
       user: 'getUser',
     }),
   },
@@ -54,7 +56,7 @@ export default{
   },
   data(){
     return {
-      image: false
+      image: false,
     }
   },
   filters: {
@@ -67,9 +69,63 @@ export default{
     }
   },
   methods: {
+    openTicket(data){
+      this.$navigateTo(TicketFull, {
+        props: {
+          data: data
+        },
+        transition: {
+          name: 'slideLeft',
+          duration: 250
+        }
+      })
+    },
+    openOrder(id, campaignId){
+      let selectedOrder = this.orders.find(order => order.orderId === id)
+      if(!selectedOrder){
+        Http.request({
+          url: 'https://api.geekex.com/konnektive?endpoint=/order/query',
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          content: JSON.stringify({params: {
+            startDate: '01/01/2022',
+            endDate: '05/26/2023',
+            campaignId: campaignId,
+            orderId: id,
+            resultsPerPage: 200
+          }})
+        })
+          .then(response => {
+            const res = response.content.toJSON()
+            if(res.result === "ERROR"){
+              alert(res.message)
+            } else {
+              this.$navigateTo(pageOrder, {
+                props: {
+                  data: res.message.data[0]
+                },
+                transition: {
+                  name: 'slideLeft',
+                  duration: 250
+                }
+              })
+            }
+          })
+      } else {
+        this.$navigateTo(pageOrder, {
+          props: {
+            data: selectedOrder
+          },
+          transition: {
+            name: 'slideLeft',
+            duration: 250
+          }
+        })
+      }
+    },
     eventName(id){
       const e = this.events.find(event => event.campignId === id)
-      return e.title
+      return e ? e.title : ' '
     },
     getQR(id){
       Http.request({

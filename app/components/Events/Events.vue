@@ -41,16 +41,10 @@
 import Bar from '../Bar'
 import Header from '../Header'
 import { mapGetters } from 'vuex'
-import { Http } from '@nativescript/core'
-import EventsItem from './Item'
+import Event from './Event'
 export default {
   components: {
     Header, Bar,
-  },
-  data(){
-    return{
-      pageEvent: EventsItem,
-    }
   },
   computed: {
     ...mapGetters({
@@ -59,7 +53,7 @@ export default {
   },
   methods: {
     onItemTap(event) {
-      this.$navigateTo(EventsItem, {
+      this.$navigateTo(Event, {
         props: {
           event: event.item
         },

@@ -175,10 +175,13 @@ Image {
     }
   }
   &__search{
-    width: 60%;
+    width: 50%;
     margin-top: 0;
     height: 40;
     border-width: 2;
+    border-color: $gray;
+    background-color: $gray;
+    border-radius: 16;
   }
 }
 

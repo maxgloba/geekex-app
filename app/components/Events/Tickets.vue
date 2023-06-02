@@ -4,14 +4,16 @@
     <RootLayout class="page__layout">
       <StackLayout height="100%">
         <Label class="header">
-          <Span class="header__title" text="Tickets:" />
+          <Span class="header__title" text="Tickets " />
+          <Span class="header__sub" :text="`(${tickets.length}):`" />
         </Label>
-        <FlexboxLayout>
-          <Label class="ticket__total-item">
-            <Span text="Tickets Count: " class="ticket__total-key" />
-            <Span :text="tickets.length" class="ticket__total-val" />
-          </Label>
-        </FlexboxLayout>
+        <StackLayout class="orders__total-item orders__total-export">
+          <Button class="btn btn__export" @tap="exportExcel">
+            <Span class="fas" text.decode="&#xf1c3;" />
+            <Span text="  " />
+            <Span text="Export to Excel" />
+          </Button>
+        </StackLayout>
         <ListView
           height="100%"
           class="ticket__list"
@@ -26,9 +28,11 @@
 </template>
 
 <script>
+import { Http } from '@nativescript/core'
+import { Utils } from '@nativescript/core';
 import { mapGetters } from 'vuex'
 import Bar from '../Bar'
-import Ticket from '../Partials/Ticket'
+import Ticket from '../Events/Ticket'
 export default {
   components: {
     Bar, Ticket
@@ -38,6 +42,36 @@ export default {
       tickets: 'getTickets',
     }),
   },
+  methods: {
+    exportExcel(){
+      const ticketsExport = []
+      this.tickets.forEach(ticket => {
+        const date = new Date(Number(ticket.date)).toLocaleString('en', {month: '2-digit', day: '2-digit', year: 'numeric'})
+        const ticketObj = {
+          'ID': ticket.ticketId,
+          'Date': date,
+          'Name': `${ticket.user.firstName} ${ticket.user.lastName}`,
+          'Email': ticket.user.email,
+          'Quiz': (ticket.quiz) ? 'True' : 'False',
+          'Phone': (ticket.user.phone) ? ticket.user.phone : ' ',
+          'Size': (ticket.size) ? ticket.size : ' '
+        }
+        ticketsExport.push(ticketObj)
+      })
+      Http.request({
+        url: 'https://api.geekex.com/ts/save-tickets',
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        content: JSON.stringify({params: {tickets: ticketsExport}})
+      })
+        .then(res => {
+          Utils.openUrl('https://api.geekex.com/ts/save-tickets')
+        })
+        .catch(err => {
+          console.dir(err)
+        })
+    }
+  }
 }
 </script>
 

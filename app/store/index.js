@@ -421,13 +421,13 @@ const store = new Vuex.Store({
       commit('resetTickets')
       orders.forEach(order => {
         if(order.orderStatus === 'COMPLETE' || (order.orderStatus === "REFUNDED" && Number(order.refundRemaining) > 0)){
-          dispatch('requestTicket', order.orderId, order.campaignId)
+          dispatch('requestTicket', {orderId: order.orderId, campaignId: order.campaignId})
         }
       })
     },
-    requestTicket({commit, state}, orderId, campaignId){
+    requestTicket({commit, state}, data){
       Http.request({
-        url: `https://api.geekex.com/db/tickets?where=orderId&value=${orderId}`,
+        url: `https://api.geekex.com/db/tickets?where=orderId&value=${data.orderId}`,
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })
@@ -442,8 +442,8 @@ const store = new Vuex.Store({
               .then(res => {
                 const user = res.content.toJSON()
                 const ticketData = {
-                  orderId: orderId,
-                  campaignId: campaignId,
+                  orderId: data.orderId,
+                  campaignId: data.campaignId,
                   ticketId: ticket.ID,
                   userId: ticket.userId,
                   quiz: JSON.parse(ticket.quiz),
