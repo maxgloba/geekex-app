@@ -1,0 +1,271 @@
+// @import '@nativescript/theme/core';
+// @import '@nativescript/theme/default';
+@import '~/scss/variables';
+
+Label,
+Button,
+TextField,
+TextView {
+  > *,
+  > * > * {
+    background-color: transparent;
+  }
+}
+
+ListView,
+RadListView {
+  min-height: 100%;
+  background-color: transparent;
+}
+
+Image {
+  min-height: 20;
+}
+
+.page{
+  background-color: $prime;
+  background-image: url('~/images/bg-img.png');
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 100% 100%;
+  &__layout{
+    padding-top: 20;
+    padding-bottom: 20;
+    padding-left: 15;
+    padding-right: 15;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.btn{
+  android-elevation: 4;
+  background-color: transparent;
+  background-image: url('~/images/btn-sm.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 15;
+  font-weight: 700;
+  color: #fff;
+  font-size: 17;
+  text-align: center;
+  display: block;
+  padding-top: 15;
+  padding-bottom: 15;
+  &__lg{
+    background-image: url('~/images/btn.png');
+    font-size: 25;
+    text-align: center;
+    display: block;
+    padding-top: 20;
+    padding-bottom: 20;
+  }
+  &__dark{
+    background-image: url('~/images/btn-dark.png');
+  }
+  &__disable{
+    background-image: url('~/images/btn-dark.png');
+    opacity: 0.3;
+  }
+  &__wrap{
+    margin-top: 20;
+    margin-bottom: 20;
+    .btn{
+      width: 48%;
+    }
+  }
+  &__export{
+    background-image: url('~/images/btn-export.png');
+  }
+  &:active{
+    android-elevation: 8;
+  }
+}
+
+.fas{
+  font-family: "Font Awesome 5 Free", "fa-solid-900";
+}
+
+.checkout{
+  &__title{
+    font-weight: 700;
+    font-size: 20;
+    color: $second;
+    margin-bottom: 10;
+    &-lg{
+      font-size: 26;
+    }
+  }
+  &__info{
+    background: $active;
+    padding: 10;
+    font-size: 12;
+    color: $second;
+    margin-top: 10;
+    margin-bottom: 0;
+    &-bold{
+      font-weight: 700;
+    }
+    &-link{
+      font-weight: 500;
+      text-decoration: underline;
+      color: $active;
+    }
+    &-no{
+      background: transparent;
+      font-size: 14;
+      line-height: 1.4;
+      padding: 0;
+    }
+  }
+  &__cart{
+    background-image: url('~/images/btn-square.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    font-family: "Font Awesome 5 Free", "fa-solid-900";
+    color: $second;
+    padding: 10 15;
+    border-radius: 2;
+    &-zoom{
+      animation-name: zoomOut;
+      animation-duration: 1s;
+    }
+  }
+}
+
+@keyframes zoomOut {
+    0%  { transform: scale(1); }
+    50% { transform: scale(0.7); }
+    100%{ transform: scale(1); }
+}
+
+.error{
+  font-size: 14;
+  color: red;
+  transition: all .5s ease;
+  &-in {
+    opacity: 1;
+  }
+  &-out {
+    opacity: 0;
+  }
+}
+
+.field{
+  color: $second;
+  placeholder-color: $second;
+  font-size: 15;
+  border-color: $active;
+  border-width: 2;
+  border-radius: 2;
+  background-color: $prime;
+  padding: 0 15;
+  margin-top: 10;
+  height: 50;
+  width: 100%;
+  &__wrap{
+    .field__country, .field__size{
+      width: 30%;
+    }
+    .field__phone, .field__email{
+      width: 65%;
+    }
+    .field__date, .field__code{
+      width: 47.5%;
+    }
+  }
+  &__search{
+    width: 60%;
+    margin-top: 0;
+    height: 40;
+    border-width: 2;
+  }
+}
+
+.checkbox{
+  background-color: transparent;
+  border-width: 2;
+  border-color: $active;
+  width: 30;
+  height: 30;
+  margin-right: 10;
+  &__active{
+    background-color: $active;
+  }
+}
+
+.info{
+  color: $second;
+  &__h2{
+    font-size: 24;
+    margin-top: 15;
+    margin-bottom: 15;
+    line-height: 1.4;
+  }
+  &__h3{
+    font-size: 18;
+    margin-bottom: 15;
+    line-height: 1.4;
+  }
+  &__p{
+    font-size: 14;
+    margin-bottom: 10;
+    line-height: 1.3;
+  }
+  &__list{
+    font-size: 14;
+    margin-bottom: 10;
+    line-height: 1.3;
+    padding-left: 15;
+  }
+}
+
+.header{
+  margin-bottom: 10;
+  &__title{
+    color: $second;
+    font-size: 24;
+    font-weight: 900;
+  }
+  &__sub{
+    color: $active;
+    font-size: 24;
+    font-weight: 700;
+  }
+}
+.icon{
+  font-family: "Font Awesome 5 Free", "fa-solid-900";
+  background-color: transparent;
+  border-width: 2;
+  border-color: $active;
+  border-radius: 50%;
+  width: 35;
+  height: 35;
+  padding: 0;
+  color: $active;
+  font-size: 15;
+  margin-left: 10;
+  &__out {
+    border-color: #ff615d;
+    color: #ff615d;
+  }
+  &__in {
+    border-color: #4ee44e;
+    color: #4ee44e;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
