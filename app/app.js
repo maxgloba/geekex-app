@@ -17,7 +17,7 @@ new Vue({
 
 Update app logo
 tns resources generate icons  ./app/images/favicon.png --background "#151515"
-tns resources generate splashes ./app/images/logo.png --background "#151515"
+tns resources generate splashes ./app/images/splashes.png --background "#151515"
 
 Run ns tns with auto restart app
 tns run ios --no-hmr
