@@ -4,6 +4,16 @@
     <RootLayout class="page__layout">
       <StackLayout height="100%">
         <Header title="Courses" />
+        <Label
+          class="course__sub"
+          textWrap="true"
+          text="Where else can you find the “Secret Sauce” to propel a company toward success, watch recorded video resources at your disposal, learn about the nitty-gritty of Native Ads, and unlock the cheat code to a thriving Snapchat advertising?" />
+        <ActivityIndicator
+          :visibility="courses.length === 0 ? 'visible':'collapse'"
+          width="47.5%"
+          height="50"
+          busy="true"
+          color="#775A35" />
         <ListView
           height="100%"
           class="course__list"
@@ -11,15 +21,16 @@
           @itemTap="openCourse">
           <v-template>
             <StackLayout class="course">
-              <Label class="course__title" :text="course.productName" />
-              <Label>
-                <Span class="course__desc" :text="limit(course.productDescription, 35)" />
-                <Span class="course__desc course__desc-line" text="Read More" />
-              </Label>
+              <Label
+                class="course__title"
+                :text="course.productName" />
               <Label class="course__wrap">
-                <Span class="course__old" :text="coursesInfo[course.baseProductName].old_price | format" />
-                <Span text="  " />
-                <Span class="course__price" :text="course.price | format" />
+                <Span
+                  class="course__desc"
+                  :text="limit(course.productDescription, 35)" />
+                <Span
+                  class="course__desc course__desc-line"
+                  text="Read More" />
               </Label>
               <Image
                 class="course__img"
@@ -33,9 +44,9 @@
 </template>
 
 <script>
-import Bar from './Bar'
-import Header from './Header'
-import Course from './Courses/Course'
+import Bar from '../Bar'
+import Header from '../Header'
+import Course from './Course'
 import { mapGetters } from 'vuex'
 export default {
   components: {
@@ -100,17 +111,13 @@ export default {
       font-weight: 600;
     }
   }
-  &__price{
-    font-size: 26;
-    color: $second;
-  }
-  &__old{
-    font-size: 18;
-    color: $active;
-    text-decoration: line-through;
-  }
   &__wrap{
     margin-bottom: 10;
+  }
+  &__sub{
+    color: $active;
+    font-size: 16;
+    margin-bottom: 15;
   }
 }
 </style>

@@ -30,6 +30,7 @@ const store = new Vuex.Store({
     loginError: false,
     courses: [],
     coursesInfo: coursesInfo,
+    courseThanks: false,
     countries: ["US +1", "GB +44", "FR +33", "DE +49", "ES +34", "IT +39", "NL +31", "MX +52", "AF +93", "AX +358", "AL +355", "DZ +213", "AS +1", "AD +376", "AO +244", "AQ +672", "AG +1", "AR +54", "AM +374", "AU +61", "AT +43", "AZ +994", "BS +1", "BH +973", "BD +880", "BB +1", "BY +375", "BE +32", "BM +1", "BO +591", "BA +387", "BW +267", "BR +55", "IO +246", "BN +673", "BG +359", "BF +226", "BI +257", "KH +855", "CM +237", "CA +1", "CV +238", "KY +1", "CF +236", "TD +235", "CL +56", "CN +86", "CX +61", "CC +61", "CO +57", "CG +242", "CR +506", "HR +385", "CU +53", "CY +357", "CZ +420", "CD +243", "DK +45", "DJ +253", "DM +1", "DO +1", "EC +593", "EG +20", "SV +503", "GQ +240", "ER +291", "EE +372", "SZ +268", "ET +251", "FK +500", "FO +298", "FJ +679", "FI +358", "GF +594", "PF +689", "GA +241", "GM +220", "GE +995", "GH +233", "GI +350", "GR +30", "GL +299", "GP +590", "GT +502", "GG +44", "GN +224", "HT +509", "HN +504", "HK +852", "HU +36", "IS +354", "IN +91", "ID +62", "IR +98", "IQ +924", "IE +353", "IM +44", "IL +972", "CI +225", "JM +1", "JP +81", "JE +44", "JO +962", "KZ +77", "KE +254", "KR +82", "KW +965", "KG +996", "LA +856", "LV +371", "LS +266", "LR +231", "LY +218", "LI +423", "LT +370", "LU +352", "MO +853", "MG +261", "MW +265", "MY +60", "MV +960", "ML +223", "MT +356", "MH +692", "MR +222", "MD +373", "MC +377", "MN +976", "ME +382", "MA +212", "MZ +258", "MM +95", "NA +224", "NR +674", "NP +977", "NC +687", "NZ +64", "NI +505", "NE +227", "NG +234", "MK +389", "MP +1", "NO +47", "OM +968", "PK +92", "PS +970", "PA +507", "PG +675", "PY +595", "PE +51", "PH +63", "PN +870", "PL +48", "PT +351", "PR +1", "QA +974", "RO +40", "RU +7", "PM +508", "VC +1", "WS +685", "SM +378", "SA +966", "SN +221", "RS +381", "SC +248", "SL +232", "SG +65", "SX +1", "SK +421", "SI +386", "SB +677", "ZA +27", "GS +500", "SS +211", "LK +94", "SD +249", "SE +46", "CH +41", "SY +963", "TW +886", "TJ +992", "TZ +255", "TH +66", "TG +228", "TT +1", "TN +216", "TR +90", "TM +993", "TC +1", "UA +380", "AE +971", "UY +598", "UZ +998", "VE +58", "VN +84", "VG +1", "VI +1"],
   },
   mutations: {
@@ -124,6 +125,9 @@ const store = new Vuex.Store({
     setCourses(state, arr){
       state.courses.push(...arr)
     },
+    setCourseThanks(state, bool){
+      state.courseThanks = bool
+    },
   },
   actions: {
     requestCampaign({commit, state}, id){
@@ -138,9 +142,10 @@ const store = new Vuex.Store({
           const campaign = res.content.toJSON()
           if(campaign.result === "SUCCESS"){
             commit('setCampaign', campaign.message.data[id])
-            commit('setPrice', Number(campaign.message.data[id].products[0].price))
             if(id === 6){
               commit('setCourses', campaign.message.data[id].products)
+            } else {
+              commit('setPrice', Number(campaign.message.data[id].products[0].price))
             }
           } else {
             alert(campaign)
@@ -241,7 +246,6 @@ const store = new Vuex.Store({
       })
         .then(res => {
           const coupon = res.content.toJSON()
-          console.dir(coupon)
           if (coupon.result === 'SUCCESS') {
             commit('setCoupon', {
               couponCode: couponCode,
@@ -477,6 +481,101 @@ const store = new Vuex.Store({
           console.dir(err)
         })
     },
+    actionCoursePayment({commit, state, dispatch}, data){
+      commit('setLoader', true)
+      Http.request({
+        url: 'https://api.geekex.com/konnektive?endpoint=/landers/clicks/import',
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        content: JSON.stringify({params: {
+          campaignId: state.campaignId,
+          pageType: "checkoutPage",
+          requestUri: "https://app.geekex.com",
+          httpReferer: "https://app.geekex.com",
+        }})
+      })
+        .then(res => {
+          const lander = res.content.toJSON();
+          if (lander.result === 'SUCCESS') {
+            this.commit('setSessionId', lander.message.sessionId)
+            const dataLeads = {
+              campaignId: state.campaignId,
+              pageType: 'leadPage',
+              billShipSame: 1,
+              firstName: data.firstName,
+              lastName: data.lastName,
+              emailAddress: data.email,
+              phoneNumber: data.phone,
+              address1: 'undefined',
+              city: 'test',
+              country: data.country.substring(2,0),
+              postalCode: '90210',
+              state: 'test',
+              sessionId: lander.message.sessionId
+            }
+            return Http.request({
+              url: 'https://api.geekex.com/konnektive?endpoint=/leads/import',
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              content: JSON.stringify({params: dataLeads})
+            })
+          } else if(lander.result === "ERROR"){
+            ccommit('setCourseError', lander.message)
+            setTimeout(() => ccommit('setCourseError', false), 4000)
+          } else {
+            console.dir(lander)
+            alert('ERROR! Something whent wrong. Please try againe later or contact us.')
+          }
+        })
+          .then(res => {
+            const lead = res.content.toJSON();
+            if (lead.result === 'SUCCESS') {
+              commit('setOrderId', lead.message.orderId)
+              const dataImport = {
+                orderId: state.orderId,
+                sessionId: state.sessionId,
+                campaignId: state.campaignId,
+                cardNumber: data.cardNumber,
+                cardMonth: data.cardMonth,
+                cardYear: data.cardYear,
+                cardSecurityCode: data.cardSecurityCode,
+                paySource: 'CREDITCARD',
+                product1_id: data.campaignProductId,
+                product1_qty: 1,
+                httpReferer: 'https://app.geekex.com',
+              }
+              if(state.coupon) dataImport.couponCode = state.coupon.couponCode
+              return Http.request({
+                url: 'https://api.geekex.com/konnektive?endpoint=/order/import',
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                content: JSON.stringify({params: dataImport})
+              })
+            } else if(lead.result === "ERROR"){
+              throw lead.message
+            } else {
+              alert('ERROR! Something whent wrong. Please try againe later or contact us.')
+            }
+          })
+            .then(res => {
+              const response = res.content.toJSON()
+              if(response.result === "SUCCESS"){
+                commit('setCourseThanks', true)
+              } else if(response.result === "ERROR"){
+                commit('setCourseError', response.message)
+                setTimeout(() => commit('setCourseError', false), 4000)
+              } else {
+                alert('ERROR! Something whent wrong. Please try againe later or contact us.')
+                console.dir(response)
+              }
+            })
+              .catch(err => {
+                console.dir(err)
+              })
+                .finally(() => {
+                  commit('setLoader', false)
+                })
+    }
   },
   getters: {
     getLoader: state => state.loader,
@@ -501,6 +600,7 @@ const store = new Vuex.Store({
     getNewTickets: state => state.newTickets,
     getCourses: state => state.courses.reverse(),
     getCoursesInfo: state => state.coursesInfo,
+    getCourseThanks: state => state.courseThanks,
   },
 })
 

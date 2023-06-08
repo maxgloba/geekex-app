@@ -17,7 +17,7 @@
                 <Label class="schedule__list-subtitle" :text="item.subtitle" />
                 <StackLayout>
                   <ListView
-                    class="schedule__list"
+                    class="schedule__list schedule__sublist"
                     :items="item.list">
                     <v-template>
                       <StackLayout>
@@ -59,27 +59,31 @@ export default {
 .schedule{
   &__list{
     background: transparent;
-    margin-top: 10vh;
+    margin-top: 10;
+    background: red;
     & * {
       color: $second;
     }
     &-title{
-      font-size: 18vh;
-      padding-left: 5vw;
-      margin-top: 5vh;
-      margin-bottom: 5vh;
+      font-size: 18;
+      padding-left: 5;
+      margin-top: 5;
+      margin-bottom: 5;
       font-weight: 700;
     }
     &-subtitle{
-      font-size: 15vh;
-      padding-left: 15vw;
-      margin-bottom: 5vh;
+      font-size: 15;
+      padding-left: 15;
+      margin-bottom: 5;
     }
     &-item{
-      font-size: 14vh;
+      font-size: 14;
       line-height: 1.4;
-      padding-left: 20vw;
+      padding-left: 20;
     }
+  }
+  &__sublist{
+    background: green;
   }
 }
 </style>

@@ -31,7 +31,7 @@
 
 <script>
 import Events from './Events/Events'
-import Courses from './Courses'
+import Courses from './Courses/Courses'
 import News from './News'
 import Services from './Services'
 import Contacts from './Contacts'

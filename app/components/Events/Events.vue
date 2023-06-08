@@ -4,6 +4,12 @@
     <RootLayout class="page__layout">
       <StackLayout height="100%">
         <Header title="Events" />
+        <ActivityIndicator
+          :visibility="events.length === 0 ? 'visible':'collapse'"
+          width="47.5%"
+          height="50"
+          busy="true"
+          color="#775A35" />
         <ListView
           class="events"
           for="item in events"

@@ -14,7 +14,7 @@ TextView {
 
 ListView,
 RadListView {
-  min-height: 100%;
+  // min-height: 100%;
   background-color: transparent;
 }
 
@@ -170,7 +170,8 @@ Image {
     .field__phone, .field__email{
       width: 65%;
     }
-    .field__date, .field__code{
+    .field__date, .field__code,
+    .field__fname, .field__lname{
       width: 47.5%;
     }
   }
@@ -182,6 +183,9 @@ Image {
     border-color: $gray;
     background-color: $gray;
     border-radius: 16;
+  }
+  &__space{
+    margin-bottom: 30;
   }
 }
 

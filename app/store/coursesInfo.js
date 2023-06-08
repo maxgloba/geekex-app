@@ -1649,13 +1649,7 @@ module.exports = {
       { text: 'Notes Included' },
       { text: 'Access To Geekhub Included' },
     ],
-    about: `
-      ONLINE OR IN PERSON LESSONS ON THE HIGH LEVEL PARTS OF LEAD GENERATION WORLD
-      WE WILL COVER FROM CLICKS TO BILLABLE CALL OR PAID FORM LEADS.
-      WE WILL EXPLORE THE WHOLE PROCESS
-      For the traffic side we will go over facebook and tik tok creatives as well as campaign structures.
-      For the revenue side of things we will go over setting up your own offer, backend monetization, working with buyers lead delivery and all the nuances it takes to increase margins.
-    `,
+    about: `ONLINE OR IN PERSON LESSONS ON THE HIGH LEVEL PARTS OF LEAD GENERATION WORLD WE WILL COVER FROM CLICKS TO BILLABLE CALL OR PAID FORM LEADS. WE WILL EXPLORE THE WHOLE PROCESS For the traffic side we will go over facebook and tik tok creatives as well as campaign structures. For the revenue side of things we will go over setting up your own offer, backend monetization, working with buyers lead delivery and all the nuances it takes to increase margins.`,
     lectures: false,
     instructors: false,
     old_price: '2,099',
@@ -1727,6 +1721,12 @@ module.exports = {
       {
         text: 'GeekOut 2021 Replays',
       },
+    ],
+    inc: [
+      'NBN (Nothing But Natives)',
+      'P3 Edition',
+      'SNAPvertising',
+      'GeekOut 2021 Replays',
     ],
     about:
       'This one provides you with excellent value—with tons of highly-insightful and informative videos, presentations, downloadable notes, and bonus content in tow. NBN walks you through the keys to having great native ads. It’s all about making the entities work in synergy and maximizing one’s funnels to the fullest. Not only does NBN let you in on the most savage strategies available, but it also emphasizes the importance of A/B testing and how the proper usage of tools can make or break one’s business. Meanwhile, P3 helps you understand what makes your business tick, particularly on the financial side of things. P3 also zeroes in on helping you make impeccable hiring decisions, be it in-house or outsourced. SNAPvertising, for its part, lets you discover why learning how to harness the power of Snapchat advertising matters today more than ever. This is based on the accounts of somebody who already pulled it off and figured out a way around the untapped Internet marketing oasis. Time is money, so don’t let other so-called “experts” on the Internet fool you into going down the rabbit hole',
