@@ -39,7 +39,7 @@
           <Label
             v-if="thanks"
             textWrap="true"
-            class="contact__text"
+            class="header__sub"
             text="THANK YOU FOR YOUR INFORMATION. WE WILL CONTACT YOU SOON" />
 
           <StackLayout class="contact__form" v-else>
@@ -178,6 +178,7 @@ export default {
       return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
     },
     submit(){
+      this.loader = true
       if(this.formData.name.length < 2){
         this.error = 'Minimum 2 letters for First name field.'
         this.focusName()
@@ -196,9 +197,25 @@ export default {
         })
           .then(res => {
             const result = res.content.toJSON()
-            console.dir(result)
+            if(result.status === 'success'){
+              this.thanks = true
+            } else{
+              throw result.msg
+            }
           })
-          .catch(err => console.log(err))
+          .catch(err => {
+            this.error = err
+            console.dir(err)
+          })
+          .finally(() => {
+            this.loader = false
+            setTimeout(() => this.thanks = false, 4000)
+            this.formData.name = ""
+            this.formData.email = ""
+            this.formData.phone = ""
+            this.formData.country = "US +1"
+            this.formData.message = ""
+          })
       }
       setTimeout(() => this.error = false, 4000)
     },
