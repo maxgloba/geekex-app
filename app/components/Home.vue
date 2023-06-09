@@ -12,18 +12,21 @@
           class="btn btn__lg"
           text="Courses"
           @tap="goTo(pageCourses)" />
-        <Button
+<!--         <Button
           class="btn btn__lg"
           text="News"
           @tap="goTo(pageNews)" />
         <Button
           class="btn btn__lg"
           text="Services"
-          @tap="goTo(pageServices)" />
+          @tap="goTo(pageServices)" /> -->
         <Button
           class="btn btn__lg"
           text="Contacts"
           @tap="goTo(pageContacts)" />
+        <Image
+          class="menu__img"
+          src="~/images/logo.png" width="80%" />
       </StackLayout>
     </RootLayout>
   </Page>
@@ -32,8 +35,8 @@
 <script>
 import Events from './Events/Events'
 import Courses from './Courses/Courses'
-import News from './News'
-import Services from './Services'
+// import News from './News'
+// import Services from './Services'
 import Contacts from './Contacts'
 import Bar from './Bar'
 import Header from './Header'
@@ -45,8 +48,8 @@ export default {
     return {
       pageEvents: Events,
       pageCourses: Courses,
-      pageNews: News,
-      pageServices: Services,
+      // pageNews: News,
+      // pageServices: Services,
       pageContacts: Contacts,
     }
   },
@@ -70,5 +73,10 @@ export default {
 @import '~/scss/variables';
 .btn{
   margin-top: 25;
+}
+.menu{
+  &__img{
+    margin-top: 30;
+  }
 }
 </style>
