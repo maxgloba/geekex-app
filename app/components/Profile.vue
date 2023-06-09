@@ -50,7 +50,7 @@ export default{
   methods: {
     requestTickets(){
       Http.request({
-        url: `https://api.geekex.com/db/tickets?where=userId&value=${this.user.ID}`,
+        url: `${this.$env.API}/db/tickets?where=userId&value=${this.user.ID}`,
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })

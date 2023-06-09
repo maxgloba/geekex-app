@@ -223,13 +223,13 @@ export default {
         ordersExport.push(orderObj)
       })
       Http.request({
-        url: 'https://api.geekex.com/ts/save-orders',
+        url: `${this.$env.API}/ts/save-orders`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: {orders: ordersExport}})
       })
         .then(res => {
-          Utils.openUrl('https://api.geekex.com/ts/save-orders')
+          Utils.openUrl(`${this.$env.API}/ts/save-orders`)
         })
         .catch(err => {
           console.dir(err)

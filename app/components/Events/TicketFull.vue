@@ -76,7 +76,7 @@ export default {
           id: this.data.campaignId
         })
       Http.request({
-        url: `https://api.geekex.com/nodemailer/welcome`,
+        url: `${this.$env.API}/nodemailer/welcome`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: {
@@ -95,7 +95,7 @@ export default {
     },
     sendConfirmEmail() {
       Http.request({
-        url: `https://api.geekex.com/nodemailer/confirm`,
+        url: `${this.$env.API}/nodemailer/confirm`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: {
@@ -107,7 +107,7 @@ export default {
       })
         .then(res => {
           console.dir(res)
-          return this.$axios.post(`${process.env.API}/db/updates`, {
+          return this.$axios.post(`${this.$env.API}/db/updates`, {
             params: {
               table: 'tickets',
               data: {
@@ -131,7 +131,7 @@ export default {
     },
     getQR(id){
       Http.request({
-        url: `https://api.geekex.com/qr?ticketId=${id}`,
+        url: `${this.$env.API}/qr?ticketId=${id}`,
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })

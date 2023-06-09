@@ -190,7 +190,7 @@ export default {
         this.focusPhone()
       } else {
         Http.request({
-          url: 'https://api.geekex.com/nodemailer/contact',
+          url: `${this.$env.API}/nodemailer/contact`,
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           content: JSON.stringify({params: this.formData})
@@ -249,10 +249,6 @@ export default {
   &__address{
     margin-top: 15;
     margin-bottom: 30;
-  }
-  &__form{
-    background: $prime;
-    padding: 15 10;
   }
 }
 .btn__submit{

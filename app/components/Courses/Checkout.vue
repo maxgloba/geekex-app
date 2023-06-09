@@ -10,7 +10,7 @@
             class="checkout__title checkout__title-lg"
             text="Thank you for your order!" />
           <Label
-            class="checkout__title"
+            class="checkout__thanks-title"
             textWrap="true"
             text="The GeekEx manager will call you soon" />
           <Image
@@ -314,10 +314,10 @@ export default {
 .checkout{
   &__thanks{
     margin-top: 50;
-  }
-  &__title{
-    text-align: center;
-    margin-bottom: 30;
+    &-title{
+      text-align: center;
+      margin-bottom: 30;
+    }
   }
   &__heart{
     margin-bottom: 30;

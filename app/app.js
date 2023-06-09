@@ -2,6 +2,7 @@ import Vue from 'nativescript-vue'
 
 import Home from './components/Home'
 import store from './store/'
+import env from './store/env'
 
 Vue.config.silent = false
 Vue.registerElement("DropDown", () => require("nativescript-drop-down/drop-down").DropDown)
@@ -9,6 +10,7 @@ Vue.registerElement("DropDown", () => require("nativescript-drop-down/drop-down"
 new Vue({
   render: (h) => h('frame', [h(Home)]),
   store,
+  env,
 }).$start()
 
 

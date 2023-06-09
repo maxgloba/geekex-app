@@ -143,7 +143,7 @@ export default {
   },
   mounted(){
     Http.request({
-      url: `https://api.geekex.com/db/tickets?where=orderId&value=${this.data.orderId}`,
+      url: `${this.$env.API}/db/tickets?where=orderId&value=${this.data.orderId}`,
       method: 'GET',
       headers: {'Content-Type': 'application/json'},
     })
@@ -151,7 +151,7 @@ export default {
         const response = res.content.toJSON()
         response.forEach(ticket => {
           Http.request({
-            url: `https://api.geekex.com/db/users?where=ID&value=${ticket.userId}`,
+            url: `${this.$env.API}/db/users?where=ID&value=${ticket.userId}`,
             method: 'GET',
             headers: {'Content-Type': 'application/json'},
           })

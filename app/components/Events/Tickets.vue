@@ -59,13 +59,13 @@ export default {
         ticketsExport.push(ticketObj)
       })
       Http.request({
-        url: 'https://api.geekex.com/ts/save-tickets',
+        url: `${this.$env.API}/ts/save-tickets`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: {tickets: ticketsExport}})
       })
         .then(res => {
-          Utils.openUrl('https://api.geekex.com/ts/save-tickets')
+          Utils.openUrl(`${this.$env.API}/ts/save-tickets`)
         })
         .catch(err => {
           console.dir(err)

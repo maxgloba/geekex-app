@@ -80,7 +80,7 @@ export default{
     },
     getQR(id){
       Http.request({
-        url: `https://api.geekex.com/qr?ticketId=${id}`,
+        url: `${this.$env.API}/qr?ticketId=${id}`,
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })

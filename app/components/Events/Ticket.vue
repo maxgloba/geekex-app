@@ -84,7 +84,7 @@ export default{
       let selectedOrder = this.orders.find(order => order.orderId === id)
       if(!selectedOrder){
         Http.request({
-          url: 'https://api.geekex.com/konnektive?endpoint=/order/query',
+          url: `${this.$env.API}/konnektive?endpoint=/order/query`,
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           content: JSON.stringify({params: {
@@ -129,7 +129,7 @@ export default{
     },
     getQR(id){
       Http.request({
-        url: `https://api.geekex.com/qr?ticketId=${id}`,
+        url: `${this.$env.API}/qr?ticketId=${id}`,
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })

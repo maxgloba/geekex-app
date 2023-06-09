@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { Http } from '@nativescript/core'
 
 import coursesInfo from './coursesInfo'
+import env from './env'
 
 Vue.use(Vuex)
 
@@ -133,7 +134,7 @@ const store = new Vuex.Store({
     requestCampaign({commit, state}, id){
       commit('setCampaignId', id)
       Http.request({
-        url: 'https://api.geekex.com/konnektive?endpoint=/campaign/query',
+        url: `${env.API}/konnektive?endpoint=/campaign/query`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: { campaignId: id }})
@@ -155,7 +156,7 @@ const store = new Vuex.Store({
     },
     requestEvents({commit}){
       Http.request({
-        url: 'https://api.geekex.com/ts/events',
+        url: `${env.API}/ts/events`,
         method: 'GET'
       })
         .then(res => {
@@ -167,7 +168,7 @@ const store = new Vuex.Store({
       commit('setLoader', true)
       commit('setBilling', data)
       Http.request({
-        url: 'https://api.geekex.com/konnektive?endpoint=/landers/clicks/import',
+        url: `${env.API}/konnektive?endpoint=/landers/clicks/import`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: {
@@ -212,7 +213,7 @@ const store = new Vuex.Store({
     },
     actionBillingLeads({commit, state, dispatch}, data){
       Http.request({
-        url: 'https://api.geekex.com/konnektive?endpoint=/leads/import',
+        url: `${env.API}/konnektive?endpoint=/leads/import`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: data})
@@ -236,7 +237,7 @@ const store = new Vuex.Store({
     actionCoupon({commit, state}, couponCode){
       commit('setLoader', true)
       Http.request({
-        url: 'https://api.geekex.com/konnektive?endpoint=/coupon/query',
+        url: `${env.API}/konnektive?endpoint=/coupon/query`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: {
@@ -283,7 +284,7 @@ const store = new Vuex.Store({
       if(state.coupon) data.couponCode = state.coupon.couponCode
 
       Http.request({
-        url: 'https://api.geekex.com/konnektive?endpoint=/order/import',
+        url: `${env.API}/konnektive?endpoint=/order/import`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: data})
@@ -316,7 +317,7 @@ const store = new Vuex.Store({
         user.campaignId = state.campaignId
       })
       Http.request({
-        url: 'https://api.geekex.com/ts',
+        url: `${env.API}/ts`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: { users: users }})
@@ -339,7 +340,7 @@ const store = new Vuex.Store({
     requestLogin({commit, state, dispatch}, obj){
       return new Promise((resolve, reject) => {
         Http.request({
-          url: 'https://api.geekex.com/login',
+          url: `${env.API}/login`,
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           content: JSON.stringify({params: obj})
@@ -367,7 +368,7 @@ const store = new Vuex.Store({
     },
     requestRoles({commit, state, dispatch}){
       Http.request({
-        url: 'https://api.geekex.com/db/roles',
+        url: `${env.API}/db/roles`,
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })
@@ -387,7 +388,7 @@ const store = new Vuex.Store({
     requestOrders({commit, dispatch, state}, campaignId) {
       const orders = []
       Http.request({
-        url: 'https://api.geekex.com/konnektive?endpoint=/order/query',
+        url: `${env.API}/konnektive?endpoint=/order/query`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: {
@@ -405,7 +406,7 @@ const store = new Vuex.Store({
             orders.push(...res.message.data)
             if(Number(res.message.totalResults) > Number(res.message.resultsPerPage)){
               return Http.request({
-                url: 'https://api.geekex.com/konnektive?endpoint=/order/query',
+                url: `${env.API}/konnektive?endpoint=/order/query`,
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 content: JSON.stringify({params: {
@@ -441,7 +442,7 @@ const store = new Vuex.Store({
     },
     requestTicket({commit, state}, data){
       Http.request({
-        url: `https://api.geekex.com/db/tickets?where=orderId&value=${data.orderId}`,
+        url: `${env.API}/db/tickets?where=orderId&value=${data.orderId}`,
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
       })
@@ -449,7 +450,7 @@ const store = new Vuex.Store({
           const response = res.content.toJSON()
           response.forEach(ticket => {
             Http.request({
-              url: `https://api.geekex.com/db/users?where=ID&value=${ticket.userId}`,
+              url: `${env.API}/db/users?where=ID&value=${ticket.userId}`,
               method: 'GET',
               headers: {'Content-Type': 'application/json'},
             })
@@ -484,7 +485,7 @@ const store = new Vuex.Store({
     actionCoursePayment({commit, state, dispatch}, data){
       commit('setLoader', true)
       Http.request({
-        url: 'https://api.geekex.com/konnektive?endpoint=/landers/clicks/import',
+        url: `${env.API}/konnektive?endpoint=/landers/clicks/import`,
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         content: JSON.stringify({params: {
@@ -514,7 +515,7 @@ const store = new Vuex.Store({
               sessionId: lander.message.sessionId
             }
             return Http.request({
-              url: 'https://api.geekex.com/konnektive?endpoint=/leads/import',
+              url: `${env.API}/konnektive?endpoint=/leads/import`,
               method: 'POST',
               headers: {'Content-Type': 'application/json'},
               content: JSON.stringify({params: dataLeads})
@@ -546,7 +547,7 @@ const store = new Vuex.Store({
               }
               if(state.coupon) dataImport.couponCode = state.coupon.couponCode
               return Http.request({
-                url: 'https://api.geekex.com/konnektive?endpoint=/order/import',
+                url: `${env.API}/konnektive?endpoint=/order/import`,
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 content: JSON.stringify({params: dataImport})
